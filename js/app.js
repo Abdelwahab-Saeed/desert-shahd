@@ -171,7 +171,7 @@
     return `
     <article class="card${arch ? ' arch-card' : ''}" style="--i:${i}">
       <div class="card-frame">
-        <a class="card-media" href="#/product/${p.id}" data-cursor="view" aria-label="${esc(p.name)}">
+        <a class="card-media${isPhoto(v.images[0]) ? ' is-photo' : ''}" href="#/product/${p.id}" data-cursor="view" aria-label="${esc(p.name)}">
           <img class="img-main" src="${img(v.images[0], 700)}" alt="${esc(p.name)}" loading="lazy">
           <img class="img-alt" src="${img(alt, 700)}" alt="" loading="lazy">
         </a>
@@ -288,7 +288,7 @@
       initFlavors();
       initCountdown();
       initTestimonials();
-      $('#lookbookGrid').innerHTML = ['konafa-mango', 'nest-2', 'cake-chocolate', 'zalabya-2', 'maamoul', 'om-ali-2']
+      $('#lookbookGrid').innerHTML = ['konafa-naama', 'balah', 'basbousa-nutella', 'baklava', 'triangles', 'shakarbara']
         .map(k => `<a class="look" href="#/shop" aria-label="شوف المنيو"><img src="${img(k, 600)}" alt="حلويات من مطبخ شهد" loading="lazy"><span>${icon('instagram')}</span></a>`).join('');
     }
     $('#signatureTrack').innerHTML = PRODUCTS.filter(p => p.tags.includes('signature')).map((p, i) => card(p, { i, arch: true })).join('');
@@ -315,7 +315,7 @@
 
   function initHeroSlider() {
     const imgs = $$('#heroSlides img'), bars = $$('#heroBars button');
-    const names = ['كنافة بالقشطة', 'بقلاوة بالفستق', 'تورتة الفراولة'];
+    const names = ['كنافة بالقشطة', 'بسبوسة بالسمن البلدي', 'بقلاوة مشكلة'];
     let i = 0, timer;
     const show = n => {
       i = (n + imgs.length) % imgs.length;
@@ -667,6 +667,7 @@
     im.style.opacity = 0;
     setTimeout(() => { im.src = img(pd.images[i], 1300); im.onload = () => { im.style.opacity = 1; }; if (im.complete) im.style.opacity = 1; }, 150);
     $$('[data-pd-thumb]').forEach((b, k) => b.classList.toggle('is-active', k === i));
+    $('#pdMain').classList.toggle('is-photo', isPhoto(pd.images[i]));
   }
   function bindPdMain() {
     const main = $('#pdMain'), im = $('#pdImg');
@@ -1008,7 +1009,7 @@
       root.innerHTML = `
         <div class="section-tight" style="padding-top:60px">
           <div class="guest-card">
-            <div class="guest-media"><img src="${img('konafa-mango', 900)}" alt="" loading="lazy"></div>
+            <div class="guest-media"><img src="${img('gift-box', 900)}" alt="" loading="lazy"></div>
             <div class="guest-body">
               <p class="eyebrow"><span class="line"></span>MY SHAHD</p>
               <h2>حسابك في <em>شهد</em></h2>
