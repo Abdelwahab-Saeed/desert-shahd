@@ -1,16 +1,18 @@
 /* =========================================================
    شَهد — بيانات المتجر (الأصناف، الأقسام، الأوزان، الشحن، الكوبونات)
-   لتغيير صورة: ضع رابط صورة كاملًا مكان اسم الصورة في PHOTOS،
-   أو استبدل الملف بنفس الاسم داخل assets/sweets/.
+   لتغيير صورة: استبدل الملف بنفس الاسم داخل assets/photos/،
+   أو ضع رابطًا كاملًا في PHOTOS.
    ========================================================= */
 
-/* الصور الحقيقية (assets/photos) — اسم الصورة ← الملف
-   لإضافة صورة: عالجها بـ tools/process-photos.py ثم أضف اسمها هنا.
-   أي اسم مش موجود هنا بيستخدم الرسمة من assets/sweets. */
+/* صور الأصناف (assets/photos) — اسم الصورة ← الملف
+   لإضافة صورة: عالجها بـ tools/process-photos.py ثم أضف اسمها هنا. */
 const PHOTO_FILES = [
   'konafa-cream', 'konafa-round', 'konafa-naama', 'konafa-naama-box', 'konafa-naama-squares', 'balah',
   'basbousa', 'basbousa-cream', 'basbousa-nutella', 'harissa', 'harissa-squares', 'shakarbara',
-  'baklava', 'baklava-tray', 'assorted-tray', 'fingers', 'fingers-mini', 'triangles', 'gift-box'
+  'baklava', 'baklava-tray', 'assorted-tray', 'fingers', 'fingers-mini', 'triangles', 'gift-box',
+  'kahk', 'cookies', 'biscuit-fingers', 'petit-four',
+  'cake-mango', 'cake-chocolate', 'cake-bw', 'cake-oreo', 'cake-mix', 'gateau-roll', 'millefeuille',
+  'rice', 'rice-nuts', 'rice-caramel', 'mahalabia', 'om-ali', 'fruit-cream'
 ];
 const PHOTOS = Object.fromEntries(PHOTO_FILES.map(k => [k, `assets/photos/${k}.webp`]));
 // يمكن أيضًا وضع رابط كامل: PHOTOS['konafa-cream'] = 'https://example.com/konafa.jpg';
@@ -19,7 +21,7 @@ const PHOTOS = Object.fromEntries(PHOTO_FILES.map(k => [k, `assets/photos/${k}.w
 function img(key, w = 900) {
   const src = PHOTOS[key] || key;
   if (/^(https?:|data:|\.?\/|assets\/)/.test(src)) return src;
-  return `assets/sweets/${src}.svg`;
+  return `assets/photos/${src}.webp`;
 }
 const isPhoto = key => !!PHOTOS[key];
 
@@ -27,9 +29,9 @@ const CATEGORIES = [
   { id: 'konafa', label: 'كنافة وبلح الشام', short: 'الكنافة', desc: 'كنافة شعر وناعمة بالقشطة، وبلح الشام المقرمش بالعسل', image: 'konafa-round' },
   { id: 'basbousa', label: 'بسبوسة وهريسة', short: 'البسبوسة', desc: 'بسبوسة طرية بالسمن البلدي، بالقشطة والبندق والنوتيلا', image: 'basbousa' },
   { id: 'baklava', label: 'بقلاوة وجلاش', short: 'البقلاوة', desc: 'رقائق ذهبية بالفستق والمكسرات، صواني وعلب هدايا', image: 'baklava-tray' },
-  { id: 'kahk', label: 'كحك ومعمول وبسكويت', short: 'المخبوزات', desc: 'طعم العيد في كل يوم، بالسمن والسكر البودرة', image: 'kahk' },
-  { id: 'cakes', label: 'تورت وحلويات غربي', short: 'التورت', desc: 'تورت وتشيز كيك وجاتوه لكل احتفال', image: 'cake-strawberry' },
-  { id: 'cups', label: 'كاسات وحلويات باردة', short: 'الكاسات', desc: 'أم علي، أرز بلبن ومهلبية', image: 'mahalabia' }
+  { id: 'kahk', label: 'كحك وبسكويت وبيتي فور', short: 'المخبوزات', desc: 'كحك وكوكيز وبسكويت بالسمن، وبيتي فور بالشوكولاتة', image: 'kahk' },
+  { id: 'cakes', label: 'تورت وجاتوه', short: 'التورت', desc: 'تورت مانجو وشوكولاتة وأوريو، وجاتوه لكل احتفال', image: 'cake-mango' },
+  { id: 'cups', label: 'أرز بلبن وأم علي', short: 'الكاسات', desc: 'أرز بلبن، مهلبية، أم علي وسلطة فواكه بالقشطة', image: 'rice-nuts' }
 ];
 
 /* المكوّن الأساسي (يظهر في قسم «من المكوّن إلى الطبق» وفي الفلاتر) */
@@ -200,98 +202,147 @@ const PRODUCTS = [
     details: ['علبة هدايا', 'كارت إهداء مجاني', 'تشكيلة 3 أصناف', 'تعيش 3 أيام في التلاجة']
   },
   {
-    id: 14, name: 'كحك بالعجمية', cat: 'kahk', price: 340, oldPrice: null, unit: 'الكيلو',
+    id: 14, name: 'كحك وبسكويت العيد', cat: 'kahk', price: 340, oldPrice: null, unit: 'الكيلو',
     flavor: 'ghee', occasion: 'ramadan', sizes: KILO,
     variants: [
-      { name: 'بالعجمية', hex: '#f2d29a', images: ['kahk', 'kahk-2'] },
-      { name: 'سادة', hex: '#fbf2df', images: ['kahk-2', 'kahk'] }
+      { name: 'مشكّل', hex: '#f2d29a', images: ['kahk'] }
     ],
-    stock: 25, rating: 4.9, reviews: 260, tags: ['featured'],
-    desc: 'كحك العيد بالسمن البلدي، بيدوب في البُق، محشي عجمية بالعسل ومتغطي سكر بودرة.',
-    details: ['سمن بلدي', 'عجمية بالعسل', 'نقش يدوي', 'يعيش أسبوعين']
+    stock: 25, rating: 4.9, reviews: 260, tags: ['featured', 'signature'],
+    desc: 'كحك بالسمن البلدي بيدوب في البُق، ومعاه بسكويت منقوش بالسكر البودرة. ريحة العيد في كل بيت.',
+    details: ['سمن بلدي', 'نقش يدوي', 'سكر بودرة', 'يعيش أسبوعين']
   },
   {
-    id: 15, name: 'معمول بالتمر', cat: 'kahk', price: 380, oldPrice: null, unit: 'الكيلو',
-    flavor: 'ghee', occasion: 'ramadan', sizes: KILO,
+    id: 15, name: 'كوكيز بالشوكولاتة', cat: 'kahk', price: 300, oldPrice: null, unit: 'الكيلو',
+    flavor: 'chocolate', occasion: 'daily', sizes: KILO,
     variants: [
-      { name: 'بالتمر', hex: '#8a5a2e', images: ['maamoul', 'maamoul-2'] },
-      { name: 'بالفستق', hex: '#8cbf4d', images: ['maamoul-2', 'maamoul'] }
+      { name: 'شوكولاتة شيبس', hex: '#b07a45', images: ['cookies'] }
     ],
-    stock: 15, rating: 4.8, reviews: 73, tags: [],
-    desc: 'معمول بالسميد والسمن محشي عجوة أو فستق، بنقشة شامي تقليدية وسكر بودرة.',
-    details: ['سميد وسمن', 'عجوة أو فستق', 'نقش بالقالب الخشب', 'يعيش أسبوعين']
+    stock: 30, rating: 4.8, reviews: 118, tags: ['new'],
+    desc: 'كوكيز بالزبدة وقطع الشوكولاتة، مقرمش على الأطراف وطري في النص. في علبة محكمة.',
+    details: ['زبدة طبيعية', 'شوكولاتة شيبس', 'علبة محكمة', 'يعيش 3 أسابيع']
   },
   {
-    id: 16, name: 'غريبة بالسمن', cat: 'kahk', price: 300, oldPrice: null, unit: 'الكيلو',
+    id: 16, name: 'بسكويت صوابع بالسمن', cat: 'kahk', price: 200, oldPrice: 240, unit: 'الكيلو',
     flavor: 'ghee', occasion: 'daily', sizes: KILO,
-    variants: [{ name: 'بالفستق', hex: '#fbf2df', images: ['ghorayeba', 'ghorayeba-2'] }],
-    stock: 22, rating: 4.8, reviews: 101, tags: [],
-    desc: 'غريبة بيضا ناعمة بتدوب أول ما تلمس لسانك، وفي نص كل قطعة حباية فستق.',
-    details: ['3 مكونات بس', 'سمن بلدي', 'فستق حلبي', 'مع الشاي بتاعك']
-  },
-  {
-    id: 17, name: 'بسكويت النشادر', cat: 'kahk', price: 190, oldPrice: 230, unit: 'الكيلو',
-    flavor: 'ghee', occasion: 'daily', sizes: KILO,
-    variants: [{ name: 'فانيليا', hex: '#eabf7a', images: ['biscuits', 'biscuits-2'] }],
+    variants: [
+      { name: 'فانيليا', hex: '#eabf7a', images: ['biscuit-fingers'] }
+    ],
     stock: 35, rating: 4.6, reviews: 84, tags: ['sale'],
-    desc: 'بسكويت بيتي مقرمش بالفانيليا والسمن، رفيق الشاي بالحليب في الصبح.',
-    details: ['فانيليا طبيعي', 'مقرمش وخفيف', 'من غير مواد حافظة', 'يعيش 3 أسابيع']
+    desc: 'بسكويت صوابع بيتي بالسمن والفانيليا، رفيق الشاي بالحليب في الصبح.',
+    details: ['فانيليا طبيعي', 'سمن بلدي', 'من غير مواد حافظة', 'يعيش 3 أسابيع']
   },
   {
-    id: 18, name: 'تورتة الفراولة', cat: 'cakes', price: 450, oldPrice: null, unit: 'الصغيرة',
+    id: 17, name: 'بيتي فور شوكولاتة مشكّل', cat: 'kahk', price: 420, oldPrice: null, unit: 'الكيلو',
+    flavor: 'chocolate', occasion: 'gift', sizes: KILO,
+    variants: [
+      { name: 'شوكولاتة ومكسرات', hex: '#5a3220', images: ['petit-four'] }
+    ],
+    stock: 12, rating: 4.9, reviews: 96, tags: ['new', 'featured'],
+    desc: 'صينية بيتي فور متغطي شوكولاتة سودا وبيضا ومكسرات مجروشة. شكل يفرّح أي ضيف.',
+    details: ['شوكولاتة سودا وبيضا', 'مكسرات مجروشة', 'صينية بغطا', 'يعيش أسبوع']
+  },
+  {
+    id: 18, name: 'تورتة المانجو', cat: 'cakes', price: 520, oldPrice: null, unit: 'الصغيرة',
     flavor: 'cream', occasion: 'guests', sizes: CAKE,
-    variants: [{ name: 'فراولة وكريمة', hex: '#ffc6d4', images: ['cake-strawberry', 'cake-strawberry-2'] }],
-    stock: 8, rating: 4.9, reviews: 132, tags: ['featured'],
-    desc: 'كيكة فانيليا هشة بطبقات كريمة شانتيه وفراولة طازة. اكتب اسم صاحب العيد في الملاحظات.',
-    details: ['فراولة طازة', 'كريمة شانتيه', 'كتابة الاسم مجانًا', 'تُطلب قبلها بيوم']
+    variants: [
+      { name: 'مانجو طازة', hex: '#ffb000', images: ['cake-mango'] }
+    ],
+    stock: 8, rating: 4.9, reviews: 132, tags: ['featured', 'signature'],
+    desc: 'كيكة فانيليا بطبقات كريمة ومانجو طازة، ومن فوق وردة مانجو وكريز.',
+    details: ['مانجو طازة', 'كريمة شانتيه', 'كتابة الاسم مجانًا', 'تُطلب قبلها بيوم']
   },
   {
-    id: 19, name: 'تورتة الشوكولاتة', cat: 'cakes', price: 520, oldPrice: null, unit: 'الصغيرة',
+    id: 19, name: 'تورتة الشوكولاتة', cat: 'cakes', price: 540, oldPrice: null, unit: 'الصغيرة',
     flavor: 'chocolate', occasion: 'guests', sizes: CAKE,
-    variants: [{ name: 'شوكولاتة وكريز', hex: '#7a432a', images: ['cake-chocolate', 'cake-chocolate-2'] }],
+    variants: [
+      { name: 'شوكولاتة', hex: '#6b3a22', images: ['cake-chocolate'] }
+    ],
     stock: 6, rating: 4.9, reviews: 118, tags: ['featured'],
-    desc: 'كيكة شوكولاتة رطبة بجاناش بلجيكي غني وكريز وسبرينكلز ملونة.',
-    details: ['شوكولاتة بلجيكي', 'جاناش غني', 'كتابة الاسم مجانًا', 'تُطلب قبلها بيوم']
+    desc: 'كيكة شوكولاتة رطبة بموس شوكولاتة غني ودوائر بندق وصوص كراميل.',
+    details: ['شوكولاتة بلجيكي', 'موس غني', 'كتابة الاسم مجانًا', 'تُطلب قبلها بيوم']
   },
   {
-    id: 20, name: 'تشيز كيك التوت', cat: 'cakes', price: 480, oldPrice: null, unit: 'الصغيرة',
-    flavor: 'cream', occasion: 'guests', sizes: CAKE,
-    variants: [{ name: 'توت مشكل', hex: '#b5274f', images: ['cheesecake', 'cheesecake-2'] }],
-    stock: 5, rating: 4.8, reviews: 64, tags: [],
-    desc: 'تشيز كيك نيويورك مخبوز على قاعدة بسكويت بالزبدة، ومن فوق صوص توت وتوت طازة.',
-    details: ['جبنة كريمي', 'قاعدة بسكويت بالزبدة', 'صوص توت بيتي', 'يتقدّم بارد']
+    id: 20, name: 'تورتة بلاك آند وايت', cat: 'cakes', price: 560, oldPrice: null, unit: 'الصغيرة',
+    flavor: 'chocolate', occasion: 'guests', sizes: CAKE,
+    variants: [
+      { name: 'شوكولاتة سودا وبيضا', hex: '#2a1a14', images: ['cake-bw'] }
+    ],
+    stock: 5, rating: 4.8, reviews: 64, tags: ['new'],
+    desc: 'طبقات شوكولاتة سودا وبيضا بجلاسيه لامع وكرات شوكولاتة وبندق.',
+    details: ['جلاسيه لامع', 'شوكولاتة بيضا', 'كتابة الاسم مجانًا', 'تُطلب قبلها بيوم']
   },
   {
-    id: 21, name: 'جاتوه مشكّل', cat: 'cakes', price: 240, oldPrice: null, unit: '6 قطع',
+    id: 21, name: 'تورتة أوريو', cat: 'cakes', price: 520, oldPrice: null, unit: 'الصغيرة',
+    flavor: 'chocolate', occasion: 'guests', sizes: CAKE,
+    variants: [
+      { name: 'أوريو', hex: '#f3ead8', images: ['cake-oreo'] }
+    ],
+    stock: 7, rating: 4.8, reviews: 77, tags: ['new'],
+    desc: 'كريمة بقطع الأوريو المطحون، ومزيّنة ببسكويت أوريو وشوكولاتة.',
+    details: ['أوريو أصلي', 'كريمة فانيليا', 'كتابة الاسم مجانًا', 'تُطلب قبلها بيوم']
+  },
+  {
+    id: 22, name: 'تورتة ميكس الأطعم', cat: 'cakes', price: 620, oldPrice: null, unit: 'الصغيرة',
+    flavor: 'chocolate', occasion: 'gift', sizes: CAKE,
+    variants: [
+      { name: '6 أطعم', hex: '#7fcfb3', images: ['cake-mix'] }
+    ],
+    stock: 5, rating: 4.9, reviews: 58, tags: ['signature', 'featured'],
+    desc: 'تورتة واحدة فيها 6 أطعم: مانجو، أوريو، شوكولاتة، بندق، عين جمل وكراميل. كل واحد ياخد اللي بيحبه.',
+    details: ['6 أطعم', 'حزام كيك أنيق', 'مناسبة للحفلات', 'تُطلب قبلها بيوم']
+  },
+  {
+    id: 23, name: 'جاتوه شوكولاتة', cat: 'cakes', price: 240, oldPrice: null, unit: '6 قطع',
     flavor: 'chocolate', occasion: 'guests', sizes: ['box6', 'box12'],
-    variants: [{ name: 'تشكيلة ألوان', hex: '#ffb3c6', images: ['gateau', 'gateau-2'] }],
+    variants: [
+      { name: 'رول شوكولاتة', hex: '#6b3a22', images: ['gateau-roll', 'millefeuille'] },
+      { name: 'ميل فاي', hex: '#c98d52', images: ['millefeuille', 'gateau-roll'] }
+    ],
     stock: 12, rating: 4.7, reviews: 57, tags: ['featured'],
-    desc: 'قطع جاتوه صغيرة ملونة: فراولة، شوكولاتة، مانجو وفستق. مثالية لحفلات الأطفال.',
-    details: ['6 نكهات', 'قطع على قد اللقمة', 'علبة هدية', 'تتحفظ في التلاجة']
+    desc: 'قطع جاتوه فردية: رول شوكولاتة بالمكسرات أو ميل فاي بطبقات مقرمشة.',
+    details: ['قطع فردية', 'نوعين', 'علبة هدية', 'تتحفظ في التلاجة']
   },
   {
-    id: 22, name: 'أم علي بالمكسرات', cat: 'cups', price: 75, oldPrice: null, unit: 'الفخارة',
-    flavor: 'nuts', occasion: 'daily', sizes: ['c1', 'c4'],
-    variants: [{ name: 'مكسرات وزبيب', hex: '#f2c472', images: ['om-ali', 'om-ali-2'] }],
-    stock: 24, rating: 4.9, reviews: 190, tags: ['featured'],
-    desc: 'أم علي سخنة في فخارة، رقائق منفوخة باللبن والقشطة والمكسرات وجوز الهند.',
-    details: ['تتسخن في الفرن', 'لبن كامل الدسم', 'مكسرات وزبيب', 'فخارة هدية']
-  },
-  {
-    id: 23, name: 'أرز بلبن', cat: 'cups', price: 45, oldPrice: null, unit: 'الكاسة',
+    id: 24, name: 'أرز بلبن', cat: 'cups', price: 45, oldPrice: null, unit: 'الكاسة',
     flavor: 'cream', occasion: 'daily', sizes: ['c1', 'c4'],
-    variants: [{ name: 'قرفة', hex: '#fffaf0', images: ['rice-pudding', 'rice-pudding-2'] }],
-    stock: 40, rating: 4.8, reviews: 230, tags: ['featured'],
-    desc: 'أرز بلبن كريمي متسوّي على نار هادية، ومن فوق قرفة وزبيب. بارد ومنعش.',
-    details: ['لبن كامل الدسم', 'قرفة وزبيب', 'سكر معتدل', 'يتقدّم بارد']
+    variants: [
+      { name: 'سادة', hex: '#fffaf0', images: ['rice', 'rice-nuts'] },
+      { name: 'بالمكسرات', hex: '#d6a868', images: ['rice-nuts', 'rice'] },
+      { name: 'بالكراميل واللوتس', hex: '#c98232', images: ['rice-caramel', 'rice'] }
+    ],
+    stock: 40, rating: 4.9, reviews: 230, tags: ['featured', 'signature'],
+    desc: 'أرز بلبن كريمي متسوّي على نار هادية، سادة أو بالمكسرات أو بالكراميل واللوتس.',
+    details: ['لبن كامل الدسم', '3 أنواع', 'سكر معتدل', 'يتقدّم بارد']
   },
   {
-    id: 24, name: 'مهلبية بالفستق', cat: 'cups', price: 50, oldPrice: null, unit: 'الكاسة',
-    flavor: 'pistachio', occasion: 'daily', sizes: ['c1', 'c4'],
-    variants: [{ name: 'فستق وماء ورد', hex: '#ffb3c6', images: ['mahalabia', 'mahalabia-2'] }],
-    stock: 30, rating: 4.8, reviews: 112, tags: [],
-    desc: 'مهلبية ناعمة بماء الورد، عليها فستق مجروش وورد مجفف. خفيفة بعد الأكل.',
-    details: ['ماء ورد طبيعي', 'فستق مجروش', 'ورد مجفف', 'تتقدّم باردة']
+    id: 25, name: 'مهلبية', cat: 'cups', price: 40, oldPrice: null, unit: 'الكاسة',
+    flavor: 'cream', occasion: 'daily', sizes: ['c1', 'c4'],
+    variants: [
+      { name: 'سادة', hex: '#fffaf0', images: ['mahalabia'] }
+    ],
+    stock: 30, rating: 4.7, reviews: 112, tags: [],
+    desc: 'مهلبية ناعمة بماء الورد، خفيفة بعد الأكل.',
+    details: ['ماء ورد طبيعي', 'لبن كامل الدسم', 'سكر معتدل', 'تتقدّم باردة']
+  },
+  {
+    id: 26, name: 'أم علي', cat: 'cups', price: 75, oldPrice: null, unit: 'الفخارة',
+    flavor: 'nuts', occasion: 'daily', sizes: ['c1', 'c4'],
+    variants: [
+      { name: 'مكسرات', hex: '#f2c472', images: ['om-ali'] }
+    ],
+    stock: 24, rating: 4.9, reviews: 190, tags: ['featured'],
+    desc: 'أم علي سخنة في فخارة، رقائق منفوخة باللبن والقشطة والمكسرات.',
+    details: ['تتسخن في الفرن', 'لبن كامل الدسم', 'مكسرات', 'فخارة هدية']
+  },
+  {
+    id: 27, name: 'سلطة فواكه بالقشطة', cat: 'cups', price: 85, oldPrice: null, unit: 'العلبة',
+    flavor: 'cream', occasion: 'daily', sizes: ['c1', 'c4'],
+    variants: [
+      { name: 'فواكه وقشطة', hex: '#ffc233', images: ['fruit-cream'] }
+    ],
+    stock: 18, rating: 4.8, reviews: 71, tags: ['new'],
+    desc: 'فواكه موسمية مقطّعة مع قشطة طازة وقطع كيك مقرمشة.',
+    details: ['فواكه طازة', 'قشطة طازة', 'قطع كيك', 'تتقدّم باردة']
   }
 ];
 
@@ -317,7 +368,7 @@ const TESTIMONIALS = [
   { name: 'ملك الشريف', role: 'عميلة من 2023', text: 'أول مرة ألاقي بسبوسة طعمها زي بتاعة تيتا بالظبط. السمن البلدي فارق جدًا.', product: 'بسبوسة بالسمن البلدي' },
   { name: 'يوسف عادل', role: 'عريس 2026', text: 'طلبنا صواني المشكّل لكتب الكتاب، الشكل كان يفتح النفس والطعم أحلى. شكرًا يا شهد.', product: 'صينية شرقي مشكّل' },
   { name: 'د. رحاب منصور', role: 'أم لثلاثة', text: 'الولاد بقوا مستنيين يوم الجمعة عشان الكنافة النوتيلا. خفيفة ومش مسكّرة زيادة.', product: 'كنافة نوتيلا' },
-  { name: 'فرح النجار', role: 'منظمة حفلات', text: 'التورت دايمًا في المعاد والكتابة عليها نضيفة. الجاتوه المشكّل نجم أي حفلة أطفال.', product: 'جاتوه مشكّل' }
+  { name: 'فرح النجار', role: 'منظمة حفلات', text: 'التورت دايمًا في المعاد والكتابة عليها نضيفة. تورتة الميكس نجمة أي حفلة.', product: 'تورتة ميكس الأطعم' }
 ];
 
 /* مناطق التوصيل */
